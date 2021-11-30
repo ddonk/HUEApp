@@ -15,21 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val settings = getSharedPreferences("UserInfo", 0)
-        val editor = settings.edit()
-
-        val text = findViewById<View>(R.id.testText) as EditText
-        val testText = findViewById<TextView>(R.id.testTextView)
-
-        val button: Button = findViewById(R.id.testButton)
-        button.setOnClickListener {
-            Log.d("TEST", text.getText().toString())
-            editor.putString("Username", text.getText().toString())
-            editor.commit()
-        }
-
-
-
-        testText.setText(settings.getString("Username", "").toString())
+        val sharedPreferencesManager = SharedPreferencesManager(getSharedPreferences("UserInfo", 0))
     }
 }
