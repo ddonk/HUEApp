@@ -1,5 +1,7 @@
 package com.example.hueapp
 
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -56,7 +58,22 @@ class FragmentDetailView(val lamp : Lamp, val testingClass: TestingClass) : Frag
         updateButton.setOnClickListener {
             val newLamp = Lamp(lamp.index, nameText.text.toString(), idText.text.toString(), LampState(onSwitch.isChecked, briBar.progress, hueBar.progress, satBar.progress))
 
+
+            Log.d("COLOR", "Color: " + HSLToRGB().toString())
+            binding.imageColorPreview.setColorFilter(HSLToRGB())
             testingClass.PutRequest(newLamp)
         }
+    }
+
+    private fun HSLToRGB() : Int {
+        Log.d("COLOR", "Progress: " + binding.hueBar.progress)
+
+        val hue : Float = binding.hueBar.progress.toFloat()/183
+        val sat : Float = binding.satBar.progress.toFloat()
+        val bri : Float = binding.brightnessBar.progress.toFloat()
+
+        val floatArray : FloatArray = floatArrayOf(hue, sat, bri)
+
+       return Color.HSVToColor(floatArray)
     }
 }
