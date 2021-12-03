@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.hueapp.databinding.FragmentLampControlBinding
 
-class FragmentDetailView : Fragment(R.layout.fragmentLampControl) {
+class FragmentDetailView : Fragment(R.layout.fragment_lamp_control) {
 
     private lateinit var binding: FragmentLampControlBinding
 
@@ -22,7 +22,7 @@ class FragmentDetailView : Fragment(R.layout.fragmentLampControl) {
         this.binding = FragmentLampControlBinding.inflate(inflater,container,false)
         val root = binding.root
 
-        initDetailView()
+//        initDetailView()
         return root
     }
 

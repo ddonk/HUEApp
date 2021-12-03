@@ -16,6 +16,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     private var titles = arrayOf("hue 1", "hue 2", "hue 3")
     private var details = arrayOf("hue 1 beschrijving","hue 2 beschrijving","hue 3 beschrijving")
     private var images = intArrayOf(R.drawable.lamp,R.drawable.lamp,R.drawable.lamp)
+    var mActivity: MainActivity? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.cardview_layout, parent, false)
@@ -45,7 +46,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             itemView.setOnClickListener { v: View ->
                 val position : Int = bindingAdapterPosition
                 Toast.makeText(itemView.context, "You clicked on lamp ${position + 1}", Toast.LENGTH_SHORT).show()
-                (activity as MainActivity).replaceFragment(titles[position])
+                mActivity?.replaceFragment(titles[position])
             }
         }
     }

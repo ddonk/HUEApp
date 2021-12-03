@@ -43,4 +43,11 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragmentContainer, FragmentDetailView())
         fragmentTransaction.commit()
     }
+
+    fun replaceFragment(s: String) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainer, FragmentDetailView())
+        fragmentTransaction.commit()
+    }
 }
