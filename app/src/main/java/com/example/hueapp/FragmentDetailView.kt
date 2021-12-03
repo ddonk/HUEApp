@@ -12,7 +12,7 @@ import com.example.hueapp.databinding.FragmentLampcontrolBinding
 import kotlin.random.Random
 import kotlin.random.Random.Default.nextInt
 
-class FragmentDetailView : Fragment(R.layout.fragment_lampcontrol) {
+class FragmentDetailView(val lamp : Lamp, val testingClass: TestingClass) : Fragment(R.layout.fragment_lampcontrol) {
 
     private lateinit var binding: FragmentLampcontrolBinding
 
@@ -24,13 +24,13 @@ class FragmentDetailView : Fragment(R.layout.fragment_lampcontrol) {
 
         this.binding = FragmentLampcontrolBinding.inflate(inflater,container,false)
         val root = binding.root
-
-        val randomNumber = Random.nextInt(100)
-        val randomNumber1 = Random.nextInt(254)
-        val randomNumber2 = Random.nextInt(65535)
-        val randomNumber3 = Random.nextInt(254)
-        val lampState = LampState(true, randomNumber1, randomNumber2, randomNumber3)
-        val lamp = Lamp(1, "Daan" + randomNumber, "Piet", lampState)
+//
+//        val randomNumber = Random.nextInt(100)
+//        val randomNumber1 = Random.nextInt(254)
+//        val randomNumber2 = Random.nextInt(65535)
+//        val randomNumber3 = Random.nextInt(254)
+//        val lampState = LampState(true, randomNumber1, randomNumber2, randomNumber3)
+//        val lamp = Lamp(1, "Daan" + randomNumber, "Piet", lampState)
         initDetailView(lamp)
         return root
     }
@@ -54,12 +54,9 @@ class FragmentDetailView : Fragment(R.layout.fragment_lampcontrol) {
         hueBar.setProgress(state.hue)
         onSwitch.isChecked = state.on
         updateButton.setOnClickListener {
-            Log.d("Lamp", "Button working")
-            val text = "Checking button"
-            val duration = Toast.LENGTH_SHORT
+            val newLamp = Lamp(lamp.index, nameText.text.toString(), idText.text.toString(), LampState(onSwitch.isChecked, briBar.progress, hueBar.progress, satBar.progress))
 
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
+            testingClass.PutRequest(newLamp)
         }
     }
 }
