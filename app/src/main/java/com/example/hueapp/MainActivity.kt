@@ -2,18 +2,47 @@ package com.example.hueapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.hueapp.databinding.ActivityMainBinding
 import android.util.Log
 import android.widget.*
 import com.example.EindNasaApp.JSONAdapter
 import android.widget.EditText
 import kotlin.random.Random
 
-
 class MainActivity : AppCompatActivity() {
+
+    lateinit var binding : ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.Btn1.setOnClickListener{
+            replaceFragment(Fragment1())
+        }
+
+        binding.Btn2.setOnClickListener{
+            replaceFragment(Fragment2())
+        }
+    }
+
+    private fun replaceFragment(fragment : Fragment) {
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainer,fragment)
+        fragmentTransaction.commit()
         setContentView(R.layout.activity_main)
 
+        
+    // START JSON
 //        onCreate(lamp)
         val jsonAdapter : JSONAdapter = JSONAdapter(this);
         val button: Button = findViewById(R.id.buttonGetRequest)
@@ -65,6 +94,5 @@ class MainActivity : AppCompatActivity() {
             val toast = Toast.makeText(this, text, duration)
             toast.show()
         }
-
     }
 }
