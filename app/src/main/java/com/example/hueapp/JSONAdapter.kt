@@ -1,107 +1,110 @@
-package com.example.hueapp
+package com.example.EindNasaApp
 
 import android.content.Context
 import android.util.Log
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
-import com.android.volley.toolbox.JsonObjectRequest
-import org.json.JSONObject
-import org.json.JSONArray
-import org.json.JSONException
-import com.android.volley.VolleyError
-import android.widget.Toast
 import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONException
+import org.json.JSONObject
+import com.example.hueapp.Lamp
+import com.example.hueapp.LampState
+import java.lang.Exception
+import com.android.volley.VolleyError
+
 import com.android.volley.Response
+
 import com.android.volley.toolbox.StringRequest
-import java.lang.Error
 
-class JSONAdapter {
 
-    fun GetLampData(context: Context?, url: String?) {
-        Log.d("JSONTEST", "Trying to get JSON")
-        val queue = Volley.newRequestQueue(context)
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null, { response ->
+
+
+
+class JSONAdapter(private val appContext: Context) {
+    private val queue: RequestQueue
+    val lamps = mutableListOf<Lamp>();
+
+    public fun getLamps() {
+    val url = "http://192.168.1.224:80/api/newdeveloper"
+    val request = JsonObjectRequest(
+        Request.Method.GET, url, null,
+        { response ->
             try {
-                val lightsObject = response.getJSONObject("lights")
-                //val lampObject = lightsObject.getJSONObject("1")
-                //Log.d("Kaas", lampObject.toString())
-                //val lampState = lampObject.getJSONObject("state")
-//                val onBool = lampState.getBoolean("on")
-//                val brightness = lampState.getInt("bri")
-//                val hue = lampState.getInt("hue")
-//                val saturation = lampState.getInt("sat")
-//                val xy = lampState.getJSONArray("xy")
-//
-//                val hueLampState = HUELampState(onBool, brightness, hue, saturation, xy[0] as Double, xy[1] as Double)
-//                val hueLamp = HUELamp(1, hueLampState)
+                val lightsJsonObject = response.getJSONObject("lights")
 
-//                Log.d("JSONTEST", hueLamp.toString())
-
-//                val jsonArray = response.getJSONArray("lights")
-//                for (i in 0 until jsonArray.length()) {
-//                    Log.d("JSONTEST", jsonArray.getJSONObject(i).toString())
-//                }
-
-//                    String name = response.getString("courseName");
-//                    String courseTracks = response.getString("courseTracks");
-//                    String courseMode = response.getString("courseMode");
-//                    String courseImageURL = response.getString("courseimg");
-            } catch (e: JSONException) {
-                e.printStackTrace()
+                GetLamp(lightsJsonObject, 1)
+            } catch (exception: JSONException) {
+                Log.e(
+                    LOGTAG,
+                    "Error while parsing JSON data: " + exception.localizedMessage
+                )
             }
-        })
-        {
-            Log.d("JSONTEST", "Failed to get data: ")
-            Toast.makeText(context, "Fail to get data..", Toast.LENGTH_SHORT).show() }
-        queue.add(jsonObjectRequest)
-
-        //return new HUELamp();
+        }
+    ) { error ->
+        Log.e(
+            LOGTAG,
+            error.localizedMessage
+        )
+    }
+    queue.add(request)
     }
 
-    fun getLamps(context : Context) {
-        val queue = Volley.newRequestQueue(context);
-        val url =
-            "http://localhost/api/newdeveloper"
-        val request = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            { response ->
-                try {
-                    val lightsObject = response.getJSONObject("lights")
-//                    val photosJsonArray = response.getJSONArray("photos")
-//                    for (i in 0 until photosJsonArray.length()) {
-//                        val photoJsonObject = photosJsonArray.getJSONObject(i)
-//                        val id = photoJsonObject.getString("id")
-//                        val sol = photoJsonObject.getString("sol")
-//                        val cameraName =
-//                            photoJsonObject.getJSONObject("camera").getString("full_name")
-//                        val imageUrl = photoJsonObject.getString("img_src")
-//                        Log.d(LOGTAG, imageUrl)
-//                        val roverName = photoJsonObject.getJSONObject("rover").getString("name")
-//                        val photo = MarsRoverPhoto(id, sol, cameraName, imageUrl, roverName)
-//                        listener.onPhotoAvailable(photo)
-//                    }
-                } catch (exception: JSONException) {
-                    Log.e("JSONTEST", "Error while parsing JSON data: " + exception.localizedMessage)
-                }
-            }
-        ) { error ->
-            Log.e("JSONTEST", error.localizedMessage)
-        }
-        queue.add(request)
-}
+    public fun GetLamp(lightsJsonObject : JSONObject, index : Int) {
+        var success = true
 
-    private fun stringToBooleanConverter(string: String): Boolean {
-        var bool = false
-        when (string) {
-            "on" -> {
-                bool = true
-                return bool
-            }
-            "off" -> {
-                bool = false
-                return bool
-            }
+        try {
+            var lampJSON = lightsJsonObject.getJSONObject("" + index)
+           CreateLamp(lampJSON)
+
+        } catch (e: Exception) {
+            success = false
         }
-        return bool
+
+        if (success) {
+            GetLamp(lightsJsonObject, index + 1)
+        }
+    }
+
+    fun CreateLamp(lampJSON : JSONObject) {
+        var nameJSON = lampJSON.getString("name")
+
+        var stateJSON = lampJSON.getJSONObject("state")
+        var booleanJSON = stateJSON.getBoolean("on")
+        var brightnessJSON = stateJSON.getInt("bri")
+        var hueJSON = stateJSON.getInt("hue")
+        var satJSON = stateJSON.getInt("sat")
+        var xyJSON = stateJSON.getJSONArray("xy")
+
+        var lampState = LampState(booleanJSON, brightnessJSON, hueJSON, satJSON, xyJSON.getDouble(0), xyJSON.getDouble(1))
+        var lamp = Lamp(nameJSON, lampState)
+
+        lamps.add(lamp)
+    }
+
+    public fun volleyPost() {
+        Log.d("JSON PUT: ", "Testing POST request")
+        val url = "http://192.168.1.224:80/api/newdeveloper/lights/1"
+
+        val json = JSONObject()
+        json.put("name", "hophee")
+
+
+        Log.d("JSON PUT", json.toString())
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.PUT, url, json,
+            { response ->  Log.d(LOGTAG, "JSON PUT Response: " + response) }
+        ) { error -> Log.d(LOGTAG, "JSON PUT Error: " + error.toString()) }
+
+        queue.add(jsonObjectRequest)
+    }
+
+    public companion object {
+        public val LOGTAG = JSONAdapter::class.java.name
+    }
+
+    init {
+        queue = Volley.newRequestQueue(appContext)
     }
 }
