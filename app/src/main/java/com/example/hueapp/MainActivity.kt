@@ -2,6 +2,12 @@ package com.example.hueapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.content.SharedPreferences
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragmentContainer,fragment)
         fragmentTransaction.commit()
         setContentView(R.layout.activity_main)
-
+// User saves
+        val sharedPreferencesManager = SharedPreferencesManager(getSharedPreferences("UserInfo", 0))
         
     // START JSON
 //        onCreate(lamp)
