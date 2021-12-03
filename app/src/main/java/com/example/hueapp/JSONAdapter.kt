@@ -55,7 +55,7 @@ class JSONAdapter(private val appContext: Context) {
 
         try {
             var lampJSON = lightsJsonObject.getJSONObject("" + index)
-           CreateLamp(lampJSON)
+           CreateLamp(lampJSON, index)
 
         } catch (e: Exception) {
             success = false
@@ -66,7 +66,7 @@ class JSONAdapter(private val appContext: Context) {
         }
     }
 
-    fun CreateLamp(lampJSON : JSONObject) {
+    fun CreateLamp(lampJSON : JSONObject, index : Int) {
         var nameJSON = lampJSON.getString("name")
 
         var stateJSON = lampJSON.getJSONObject("state")
@@ -74,23 +74,40 @@ class JSONAdapter(private val appContext: Context) {
         var brightnessJSON = stateJSON.getInt("bri")
         var hueJSON = stateJSON.getInt("hue")
         var satJSON = stateJSON.getInt("sat")
-        var xyJSON = stateJSON.getJSONArray("xy")
+        var modelIDJSON = lampJSON.getString("modelid")
 
-        var lampState = LampState(booleanJSON, brightnessJSON, hueJSON, satJSON, xyJSON.getDouble(0), xyJSON.getDouble(1))
-        var lamp = Lamp(nameJSON, lampState)
+        var lampState = LampState(booleanJSON, brightnessJSON, hueJSON, satJSON)
+        var lamp = Lamp(index, nameJSON, modelIDJSON, lampState)
 
         lamps.add(lamp)
     }
 
-    public fun volleyPost() {
-        Log.d("JSON PUT: ", "Testing POST request")
-        val url = "http://192.168.1.224:80/api/newdeveloper/lights/1"
+    private fun PutStateRequest(lampState: LampState, index: Int) {
+        val url = "http://192.168.1.224:80/api/newdeveloper/lights/" + index + "/state"
+
+        val stateJSON = JSONObject()
+
+        stateJSON.put("on", lampState.on)
+        stateJSON.put("bri", lampState.brightness)
+        stateJSON.put("hue", lampState.hue)
+        stateJSON.put("sat", lampState.sat)
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.PUT, url, stateJSON,
+            { response ->  Log.d(LOGTAG, "JSON PUT Response: " + response) }
+        ) { error -> Log.d(LOGTAG, "JSON PUT Error: " + error.toString()) }
+
+        queue.add(jsonObjectRequest)
+    }
+
+
+    public fun PutRequest(lamp : Lamp) {
+        Log.d("JSON PUT: ", "Testing PUT request")
+        val url = "http://192.168.1.224:80/api/newdeveloper/lights/" + lamp.index
 
         val json = JSONObject()
-        json.put("name", "hophee")
 
-
-        Log.d("JSON PUT", json.toString())
+        json.put("name", "" + lamp.name)
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.PUT, url, json,
@@ -98,6 +115,8 @@ class JSONAdapter(private val appContext: Context) {
         ) { error -> Log.d(LOGTAG, "JSON PUT Error: " + error.toString()) }
 
         queue.add(jsonObjectRequest)
+
+        PutStateRequest(lamp.state, lamp.index)
     }
 
     public companion object {
