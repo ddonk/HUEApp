@@ -10,6 +10,10 @@ class SharedPreferencesManager(private val settings: SharedPreferences) {
         editor.commit()
     }
 
+    fun GetSetting(key: String) : String {
+        return settings.getString(key, "").toString()
+    }
+
     init {
         editor = settings.edit()
     }

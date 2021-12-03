@@ -1,5 +1,6 @@
 package com.example.hueapp
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,7 @@ class FragmentRecycleView : Fragment (R.layout.fragment_recycleview) {
     private fun initRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            testingClass = TestingClass(context)
+            testingClass = TestingClass(context, SharedPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context)))
 
             lampAdapter = RecyclerAdapter(testingClass, binding.refreshButton, binding.refreshButton1)
             adapter = lampAdapter

@@ -11,14 +11,14 @@ import com.example.EindNasaApp.JSONAdapter
 import org.json.JSONException
 import org.json.JSONObject
 
-class TestingClass(private val appContext: Context) {
+class TestingClass(private val appContext: Context, val sharedPreferencesManager: SharedPreferencesManager) {
     private val queue: RequestQueue
     private val arrayList = ArrayList<Lamp>()
 
     fun GetLamps() : ArrayList<Lamp>  {
         val arrayList = ArrayList<Lamp>()
 
-        val url = "http://192.168.1.224:80/api/newdeveloper"
+        val url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper"
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
@@ -69,7 +69,7 @@ class TestingClass(private val appContext: Context) {
 
     public fun PutRequest(lamp : Lamp) {
         Log.d("JSON PUT: ", "Testing PUT request")
-        val url = "http://192.168.1.224:80/api/newdeveloper/lights/" + lamp.index
+        val url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper/lights/" + lamp.index
 
         val json = JSONObject()
 
@@ -86,7 +86,7 @@ class TestingClass(private val appContext: Context) {
     }
 
     private fun PutStateRequest(lampState: LampState, index: Int) {
-        val url = "http://192.168.1.224:80/api/newdeveloper/lights/" + index + "/state"
+        val url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper/lights/" + index + "/state"
 
         val stateJSON = JSONObject()
 
