@@ -1,6 +1,7 @@
 package com.example.hueapp
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.EindNasaApp.JSONAdapter
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+class RecyclerAdapter(val jsonAdapter: JSONAdapter) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayOf("hue 1", "hue 2", "hue 3")
+   // private lateinit var titles : Array<String>
+    private var titles = arrayOf("hue 1 ","hue 2 ","hue 3 ")
+    //private lateinit var details : Array<String>
     private var details = arrayOf("hue 1 beschrijving","hue 2 beschrijving","hue 3 beschrijving")
     private var images = intArrayOf(R.drawable.lamp,R.drawable.lamp,R.drawable.lamp)
 
@@ -27,8 +31,6 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         holder.itemTitle.text = titles[position]
         holder.itemDetail.text = details[position]
         holder.itemImage.setImageResource(images[position])
-
-
     }
 
     override fun getItemCount(): Int {
@@ -36,11 +38,18 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+
         var itemImage: ImageView
         var itemTitle: TextView
         var itemDetail: TextView
 
         init {
+
+
+            jsonAdapter.aedfrh245w6tju = jsonAdapter.getLamps()
+
+            Log.d("SIZE", "" +  jsonAdapter.aedfrh245w6tju.size)
+
             itemImage = itemView.findViewById(R.id.item_image)
             itemTitle = itemView.findViewById(R.id.item_title)
             itemDetail = itemView.findViewById(R.id.item_detail)

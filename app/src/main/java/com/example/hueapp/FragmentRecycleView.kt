@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.EindNasaApp.JSONAdapter
 
 import com.example.hueapp.databinding.FragmentRecycleviewBinding
 
@@ -15,6 +16,7 @@ class FragmentRecycleView : Fragment (R.layout.fragment_recycleview) {
 
     private lateinit var binding: FragmentRecycleviewBinding
     private lateinit var lampAdapter: RecyclerAdapter
+    private lateinit var jsonAdapter: JSONAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +32,9 @@ class FragmentRecycleView : Fragment (R.layout.fragment_recycleview) {
     private fun initRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            lampAdapter = RecyclerAdapter()
+            jsonAdapter = JSONAdapter(context)
+
+            lampAdapter = RecyclerAdapter(jsonAdapter)
             adapter = lampAdapter
         }
     }
