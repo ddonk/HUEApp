@@ -12,14 +12,8 @@ import com.example.hueapp.Lamp
 import com.example.hueapp.LampState
 import java.lang.Exception
 import com.android.volley.VolleyError
-
 import com.android.volley.Response
-
 import com.android.volley.toolbox.StringRequest
-
-
-
-
 
 class JSONAdapter(private val appContext: Context) {
     private val queue: RequestQueue

@@ -1,5 +1,6 @@
 package com.example.hueapp
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
@@ -36,12 +38,14 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         var itemDetail: TextView
 
         init {
+
             itemImage = itemView.findViewById(R.id.item_image)
             itemTitle = itemView.findViewById(R.id.item_title)
             itemDetail = itemView.findViewById(R.id.item_detail)
             itemView.setOnClickListener { v: View ->
                 val position : Int = bindingAdapterPosition
                 Toast.makeText(itemView.context, "You clicked on lamp ${position + 1}", Toast.LENGTH_SHORT).show()
+                (activity as MainActivity).replaceFragment(titles[position])
             }
         }
     }
