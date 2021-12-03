@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.EindNasaApp.JSONAdapter
 
 class RecyclerAdapter(val testingClass: TestingClass, val refreshButton : Button, val refreshButton1 : Button) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 

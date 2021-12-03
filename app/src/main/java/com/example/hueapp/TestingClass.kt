@@ -3,11 +3,11 @@ package com.example.hueapp
 import android.content.Context
 import android.os.SystemClock
 import android.util.Log
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.EindNasaApp.JSONAdapter
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -16,9 +16,13 @@ class TestingClass(private val appContext: Context, val sharedPreferencesManager
     private val arrayList = ArrayList<Lamp>()
 
     fun GetLamps() : ArrayList<Lamp>  {
-        val arrayList = ArrayList<Lamp>()
 
-        val url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper"
+        var url : String = ""
+        try {
+            url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper"
+        } catch(exception: JSONException) {
+        }
+
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
@@ -48,16 +52,26 @@ class TestingClass(private val appContext: Context, val sharedPreferencesManager
 
                 } catch (exception: JSONException) {
                     Log.e(
-                        JSONAdapter.LOGTAG,
+                        "JSON",
                         "Error while parsing JSON data: " + exception.localizedMessage
                     )
+                    val text = "Edit IP and Port in Settings"
+                    val duration = Toast.LENGTH_LONG
+
+                    val toast = Toast.makeText(appContext, text, duration)
+                    toast.show()
                 }
             }
         ) { error ->
             Log.e(
-                JSONAdapter.LOGTAG,
+                "JSON",
                 error.localizedMessage
             )
+            val text = "Edit IP and Port in Settings"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(appContext, text, duration)
+            toast.show()
         }
 
         queue.add(request)
@@ -69,7 +83,17 @@ class TestingClass(private val appContext: Context, val sharedPreferencesManager
 
     public fun PutRequest(lamp : Lamp) {
         Log.d("JSON PUT: ", "Testing PUT request")
-        val url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper/lights/" + lamp.index
+        var url = ""
+        try {
+            url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper/lights/" + lamp.index
+        } catch(exception: JSONException) {
+            val text = "Edit IP and Port in Settings"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(appContext, text, duration)
+            toast.show()
+        }
+
 
         val json = JSONObject()
 
@@ -77,8 +101,19 @@ class TestingClass(private val appContext: Context, val sharedPreferencesManager
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.PUT, url, json,
-            { response ->  Log.d(JSONAdapter.LOGTAG, "JSON PUT Response: " + response) }
-        ) { error -> Log.d(JSONAdapter.LOGTAG, "JSON PUT Error: " + error.toString()) }
+            { response ->  Log.d("JSON", "JSON PUT Response: " + response)
+                val text = "Edit IP and Port in Settings"
+                val duration = Toast.LENGTH_LONG
+
+                val toast = Toast.makeText(appContext, text, duration)
+                toast.show()
+            }
+        ) { error -> Log.d("JSON", "JSON PUT Error: " + error.toString())
+            val text = "Edit IP and Port in Settings"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(appContext, text, duration)
+            toast.show()}
 
         queue.add(jsonObjectRequest)
 
@@ -86,8 +121,17 @@ class TestingClass(private val appContext: Context, val sharedPreferencesManager
     }
 
     private fun PutStateRequest(lampState: LampState, index: Int) {
-        val url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper/lights/" + index + "/state"
+        var url = ""
+        try{
+            url = "http://"+ sharedPreferencesManager.GetSetting("IP4") + ":" + sharedPreferencesManager.GetSetting("Port")+"/api/newdeveloper/lights/" + index + "/state"
+        }
+        catch(exception: JSONException) {
+            val text = "Edit IP and Port in Settings"
+            val duration = Toast.LENGTH_LONG
 
+            val toast = Toast.makeText(appContext, text, duration)
+            toast.show()
+        }
         val stateJSON = JSONObject()
 
         stateJSON.put("on", lampState.on)
@@ -99,8 +143,20 @@ class TestingClass(private val appContext: Context, val sharedPreferencesManager
         }
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.PUT, url, stateJSON,
-            { response ->  Log.d(JSONAdapter.LOGTAG, "JSON PUT Response: " + response) }
-        ) { error -> Log.d(JSONAdapter.LOGTAG, "JSON PUT Error: " + error.toString()) }
+            { response ->  Log.d("JSON", "JSON PUT Response: " + response)
+                val text = "Edit IP and Port in Settings"
+                val duration = Toast.LENGTH_LONG
+
+                val toast = Toast.makeText(appContext, text, duration)
+                toast.show()
+            }
+        ) { error -> Log.d("JSON", "JSON PUT Error: " + error.toString())
+            val text = "Edit IP and Port in Settings"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(appContext, text, duration)
+            toast.show()
+        }
 
         queue.add(jsonObjectRequest)
     }
