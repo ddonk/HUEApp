@@ -44,6 +44,7 @@ class RecyclerAdapter(val testingClass: TestingClass, val refreshButton : Button
         var itemTitle: TextView
         var itemDetail: TextView
         init {
+
             itemImage = itemView.findViewById(R.id.item_image)
             itemTitle = itemView.findViewById(R.id.item_title)
             itemDetail = itemView.findViewById(R.id.item_detail)
