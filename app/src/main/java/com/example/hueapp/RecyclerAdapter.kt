@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,8 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         holder.itemTitle.text = titles[position]
         holder.itemDetail.text = details[position]
         holder.itemImage.setImageResource(images[position])
+
+
     }
 
     override fun getItemCount(): Int {
@@ -38,15 +41,23 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         var itemDetail: TextView
 
         init {
-
             itemImage = itemView.findViewById(R.id.item_image)
             itemTitle = itemView.findViewById(R.id.item_title)
             itemDetail = itemView.findViewById(R.id.item_detail)
-            itemView.setOnClickListener { v: View ->
-                val position : Int = bindingAdapterPosition
-                Toast.makeText(itemView.context, "You clicked on lamp ${position + 1}", Toast.LENGTH_SHORT).show()
-                (activity as MainActivity).replaceFragment(titles[position])
-            }
+
+            itemView.setOnClickListener (object :View.OnClickListener{
+                override fun onClick(v: View?) {
+                    val activity=v!!.context as AppCompatActivity
+                    val fragmentDetailView=FragmentDetailView()
+                    activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragmentDetailView).addToBackStack(null).commit()
+                }
+            } )
+//            itemView.setOnClickListener { v: View ->
+//                val position : Int = bindingAdapterPosition
+//                Toast.makeText(itemView.context, "You clicked on lamp ${position + 1}", Toast.LENGTH_SHORT).show()
+//                (activity as MainActivity).replaceFragment(titles[position])
+//            }
+
         }
     }
 }

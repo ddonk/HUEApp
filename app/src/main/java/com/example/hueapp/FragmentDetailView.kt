@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.example.hueapp.databinding.FragmentLampControlBinding
 
-class FragmentDetailView : Fragment(R.layout.fragmentLampControl) {
+import com.example.hueapp.databinding.FragmentLampcontrolBinding
+import kotlin.random.Random
+import kotlin.random.Random.Default.nextInt
 
-    private lateinit var binding: FragmentLampControlBinding
+class FragmentDetailView : Fragment(R.layout.fragment_lampcontrol) {
+
+    private lateinit var binding: FragmentLampcontrolBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,10 +22,16 @@ class FragmentDetailView : Fragment(R.layout.fragmentLampControl) {
         savedInstanceState: Bundle?
     ) : View? {
 
-        this.binding = FragmentLampControlBinding.inflate(inflater,container,false)
+        this.binding = FragmentLampcontrolBinding.inflate(inflater,container,false)
         val root = binding.root
 
-        initDetailView()
+        val randomNumber = Random.nextInt(100)
+        val randomNumber1 = Random.nextInt(254)
+        val randomNumber2 = Random.nextInt(65535)
+        val randomNumber3 = Random.nextInt(254)
+        val lampState = LampState(true, randomNumber1, randomNumber2, randomNumber3)
+        val lamp = Lamp(1, "Daan" + randomNumber, "Piet", lampState)
+        initDetailView(lamp)
         return root
     }
 
