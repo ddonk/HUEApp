@@ -44,8 +44,6 @@ class RecyclerAdapter(val jsonAdapter: JSONAdapter) : RecyclerView.Adapter<Recyc
         var itemDetail: TextView
 
         init {
-
-
             jsonAdapter.aedfrh245w6tju = jsonAdapter.getLamps()
 
             Log.d("SIZE", "" +  jsonAdapter.aedfrh245w6tju.size)

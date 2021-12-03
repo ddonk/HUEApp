@@ -7,13 +7,13 @@ import org.junit.Test
 
 class SharedPreferencesManagerTest {
 
-    val sharedPreferencesManager
-    @Before
-    fun setUp() {
-        SharedPreferencesManager(.getSharedPreferences("UserInfo", 0))
-    }
-
-    @Test
-    fun addSetting() {
-    }
+//    val sharedPreferencesManager
+//    @Before
+//    fun setUp() {
+//        SharedPreferencesManager(getSharedPreferences("UserInfo", 0))
+//    }
+//
+//    @Test
+//    fun addSetting() {
+//    }
 }
