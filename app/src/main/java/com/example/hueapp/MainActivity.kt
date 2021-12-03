@@ -2,7 +2,12 @@ package com.example.hueapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hueapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,18 +20,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.Btn1.setOnClickListener{
-
             replaceFragment(Fragment1())
-
         }
 
         binding.Btn2.setOnClickListener{
-
             replaceFragment(Fragment2())
-
         }
-
-
     }
 
     private fun replaceFragment(fragment : Fragment) {
