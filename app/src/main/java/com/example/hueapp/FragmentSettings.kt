@@ -15,7 +15,7 @@ class FragmentSettings : Fragment(R.layout.fragment2) {
     //private var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>? = null
 
     private lateinit var binding : Fragment2Binding
-    private lateinit var sharedPreferencesManager : SharedPreferencesManager
+    public lateinit var sharedPreferencesManager : SharedPreferencesManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
