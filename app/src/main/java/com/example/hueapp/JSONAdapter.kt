@@ -12,20 +12,17 @@ import com.example.hueapp.Lamp
 import com.example.hueapp.LampState
 import java.lang.Exception
 import com.android.volley.VolleyError
-
 import com.android.volley.Response
-
 import com.android.volley.toolbox.StringRequest
-
-
-
-
 
 class JSONAdapter(private val appContext: Context) {
     private val queue: RequestQueue
-    val lamps = mutableListOf<Lamp>();
+    public var aedfrh245w6tju = ArrayList<Lamp>()
 
-    public fun getLamps() {
+    public fun getLamps() : ArrayList<Lamp> {
+        val arrayList = ArrayList<Lamp>()
+
+
     val url = "http://192.168.1.224:80/api/newdeveloper"
     val request = JsonObjectRequest(
         Request.Method.GET, url, null,
@@ -33,7 +30,11 @@ class JSONAdapter(private val appContext: Context) {
             try {
                 val lightsJsonObject = response.getJSONObject("lights")
 
-                GetLamp(lightsJsonObject, 1)
+                for (i in 1..3) {
+                    arrayList.add(GetLamp(lightsJsonObject, i))
+                }
+
+
             } catch (exception: JSONException) {
                 Log.e(
                     LOGTAG,
@@ -48,25 +49,13 @@ class JSONAdapter(private val appContext: Context) {
         )
     }
     queue.add(request)
+
+        Log.d("TESTING", "Arraylist size: " + arrayList.size)
+        return arrayList
     }
 
-    public fun GetLamp(lightsJsonObject : JSONObject, index : Int) {
-        var success = true
-
-        try {
-            var lampJSON = lightsJsonObject.getJSONObject("" + index)
-           CreateLamp(lampJSON, index)
-
-        } catch (e: Exception) {
-            success = false
-        }
-
-        if (success) {
-            GetLamp(lightsJsonObject, index + 1)
-        }
-    }
-
-    fun CreateLamp(lampJSON : JSONObject, index : Int) {
+    public fun GetLamp(lightsJsonObject : JSONObject, index : Int) : Lamp {
+        var lampJSON = lightsJsonObject.getJSONObject("" + index)
         var nameJSON = lampJSON.getString("name")
 
         var stateJSON = lampJSON.getJSONObject("state")
@@ -78,9 +67,28 @@ class JSONAdapter(private val appContext: Context) {
 
         var lampState = LampState(booleanJSON, brightnessJSON, hueJSON, satJSON)
         var lamp = Lamp(index, nameJSON, modelIDJSON, lampState)
-
-        lamps.add(lamp)
+        Log.d("TESTING", "Lamp: " + lamp)
+        return lamp
     }
+
+//    fun CreateLamp(lampJSON : JSONObject, index : Int) {
+//        var nameJSON = lampJSON.getString("name")
+//
+//        var stateJSON = lampJSON.getJSONObject("state")
+//        var booleanJSON = stateJSON.getBoolean("on")
+//        var brightnessJSON = stateJSON.getInt("bri")
+//        var hueJSON = stateJSON.getInt("hue")
+//        var satJSON = stateJSON.getInt("sat")
+//        var modelIDJSON = lampJSON.getString("modelid")
+//
+//        var lampState = LampState(booleanJSON, brightnessJSON, hueJSON, satJSON)
+//        var lamp = Lamp(index, nameJSON, modelIDJSON, lampState)
+//
+//
+//        lamps.add(lamp)
+//        Log.d("TESTING", "Adding lamp to lamps: " + lamp.toString() + "New lamps size: " + lamps.size)
+//        Log.d("TESTING", "List: " + lamps)
+//    }
 
     private fun PutStateRequest(lampState: LampState, index: Int) {
         val url = "http://192.168.1.224:80/api/newdeveloper/lights/" + index + "/state"

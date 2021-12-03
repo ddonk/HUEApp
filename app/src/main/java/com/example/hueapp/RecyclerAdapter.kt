@@ -1,19 +1,28 @@
 package com.example.hueapp
 
+import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.EindNasaApp.JSONAdapter
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+class RecyclerAdapter(val testingClass: TestingClass, val refreshButton : Button, val refreshButton1 : Button) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayOf("hue 1", "hue 2", "hue 3")
+   // private lateinit var titles : Array<String>
+    private var titles = arrayOf("hue 1 ","hue 2 ","hue 3 ")
+    //private lateinit var details : Array<String>
     private var details = arrayOf("hue 1 beschrijving","hue 2 beschrijving","hue 3 beschrijving")
     private var images = intArrayOf(R.drawable.lamp,R.drawable.lamp,R.drawable.lamp)
+    private var arrayList = ArrayList<Lamp>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.cardview_layout, parent, false)
@@ -34,15 +43,47 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         var itemImage: ImageView
         var itemTitle: TextView
         var itemDetail: TextView
-
         init {
             itemImage = itemView.findViewById(R.id.item_image)
             itemTitle = itemView.findViewById(R.id.item_title)
             itemDetail = itemView.findViewById(R.id.item_detail)
-            itemView.setOnClickListener { v: View ->
-                val position : Int = bindingAdapterPosition
-                Toast.makeText(itemView.context, "You clicked on lamp ${position + 1}", Toast.LENGTH_SHORT).show()
+
+            refreshButton.setOnClickListener {
+                Log.d("REFRESH", "Arraylist size: " + arrayList)
+                for (i in 0 until arrayList.size) {
+                    titles[i] = arrayList[i].name
+                    details[i] = arrayList[i].modelid
+                    Log.d("REFRESH", "Index: " + i)
+                }
+
+                for (i in 0 until arrayList.size) {
+                    Log.d("REFRESH", "Titles: " + titles[i])
+                    Log.d("REFRESH", "Details: " + details[i])
+                }
+
+                bindingAdapter?.notifyDataSetChanged()
             }
+
+            refreshButton1.setOnClickListener {
+                arrayList = testingClass.GetLamps()
+                Log.d("REFRESH", "GETTING lamps")
+            }
+
+            itemView.setOnClickListener (object :View.OnClickListener{
+                override fun onClick(v: View?) {
+                    val activity=v!!.context as AppCompatActivity
+                    val fragmentDetailView=FragmentDetailView(arrayList[position], testingClass)
+                    activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragmentDetailView).addToBackStack(null).commit()
+                }
+            } )
+//            itemView.setOnClickListener { v: View ->
+//                val position : Int = bindingAdapterPosition
+//                Toast.makeText(itemView.context, "You clicked on lamp ${position + 1}", Toast.LENGTH_SHORT).show()
+//                (activity as MainActivity).replaceFragment(titles[position])
+//            }
+
         }
     }
+
+
 }
