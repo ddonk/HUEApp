@@ -16,7 +16,7 @@ class FragmentRecycleView : Fragment (R.layout.fragment_recycleview) {
 
     private lateinit var binding: FragmentRecycleviewBinding
     private lateinit var lampAdapter: RecyclerAdapter
-    private lateinit var jsonAdapter: JSONAdapter
+    private lateinit var testingClass: TestingClass
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,9 +32,9 @@ class FragmentRecycleView : Fragment (R.layout.fragment_recycleview) {
     private fun initRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            jsonAdapter = JSONAdapter(context)
+            testingClass = TestingClass(context)
 
-            lampAdapter = RecyclerAdapter(jsonAdapter)
+            lampAdapter = RecyclerAdapter(testingClass, binding.refreshButton, binding.refreshButton1)
             adapter = lampAdapter
         }
     }
